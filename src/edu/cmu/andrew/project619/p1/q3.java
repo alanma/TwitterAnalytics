@@ -6,6 +6,15 @@
 
 package edu.cmu.andrew.project619.p1;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import edu.cmu.andrew.project619.db.DBConnector;
 import edu.cmu.andrew.project619.db.MySqlConnector;
 
@@ -51,10 +60,10 @@ public class q3 extends HttpServlet {
 
             String userid = request.getParameter("userid");
 
-	    List<String> userID = db.getRetweetUidByUid(userId);
+	    List<String> userID = db.getRetweetUidByUid(userid);
             
 	    for (String user : userID) {
-                out.println(tweet);
+		out.println(user);
             }
         } catch (Exception ex){
             ex.printStackTrace();

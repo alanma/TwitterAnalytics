@@ -101,4 +101,10 @@ public class HBaseConnector implements DBConnector{
         }
 
     }
+
+    @Override
+    public List<String> getRetweetUidByUid(String userId) {
+	// TODO Auto-generated method stub
+	return null;
+    }
 }
