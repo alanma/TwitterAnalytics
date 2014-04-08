@@ -1,15 +1,17 @@
 package edu.cmu.andrew.project619.db;
 
-import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 /**
  * 
@@ -52,8 +54,8 @@ public class MySqlConnector implements DBConnector {
                 tweetID.add(result.getString("tid"));
             }
             Collections.sort(tweetID);
-	    result.close();
-	    statement.close();
+            result.close();
+            statement.close();
             return tweetID;
         } catch (SQLException ex) {
             Logger.getLogger(MySqlConnector.class.getName()).log(Level.SEVERE, null, ex);
@@ -61,12 +63,31 @@ public class MySqlConnector implements DBConnector {
         return tweetID;
     }
 
-
-	@Override
-	public List<String> getRetweetUidByUid(String userId) {
-		// TODO Auto-generated method stub
-		return null;
+    @Override
+    public List<String> getRetweetUidByUid(String userId) {
+    	List<String> uidStr=new ArrayList<String>();
+	List<Long> uids = new ArrayList<Long>();
+	
+	try {
+	    String query = "SELECT DISTINCT uid FROM twitts WHERE original_uid='" + userId+"';";
+	    Statement statement = (Statement) connect.createStatement();
+	    ResultSet result = statement.executeQuery(query);
+	    while (result.next()) {
+		uids.add(Long.parseLong(result.getString("uid")));
+	    }
+	    Collections.sort(uids);
+	    result.close();
+	    statement.close();
+	    for(Long l:uids){
+	    	uidStr.add(l+"");
+	    }    
+	    return uidStr;
+	} catch (SQLException ex) {
+	    Logger.getLogger(MySqlConnector.class.getName()).log(Level.SEVERE,
+		    null, ex);
 	}
+	return uidStr;
+    }
 
 	
 

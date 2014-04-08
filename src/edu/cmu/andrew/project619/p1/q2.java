@@ -43,7 +43,8 @@ public class q2 extends HttpServlet {
     
     @Override 
     public void init(){
-    	db=new HBaseConnector("twitter");
+    	//db=new HBaseConnector("twitter");
+    	db=new MySqlConnector();
     }
     
     @Override
