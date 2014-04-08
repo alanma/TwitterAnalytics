@@ -29,4 +29,14 @@
     <servlet-name>q1</servlet-name>
     <url-pattern>/q1</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>q3</display-name>
+    <servlet-name>q3</servlet-name>
+    <servlet-class>edu.cmu.andrew.project619.p1.q3</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>q3</servlet-name>
+    <url-pattern>/q3</url-pattern>
+  </servlet-mapping>
 </web-app>

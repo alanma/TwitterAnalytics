@@ -7,6 +7,7 @@
 package edu.cmu.andrew.project619.p1;
 
 import edu.cmu.andrew.project619.db.DBConnector;
+import edu.cmu.andrew.project619.db.HBaseConnector;
 import edu.cmu.andrew.project619.db.MySqlConnector;
 
 import java.io.IOException;
@@ -42,7 +43,7 @@ public class q2 extends HttpServlet {
     
     @Override 
     public void init(){
-    	db=new MySqlConnector();
+    	db=new HBaseConnector("twitter");
     }
     
     @Override

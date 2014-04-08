@@ -7,7 +7,17 @@
 package edu.cmu.andrew.project619.p1;
 
 import edu.cmu.andrew.project619.db.DBConnector;
+import edu.cmu.andrew.project619.db.HBaseConnector;
 import edu.cmu.andrew.project619.db.MySqlConnector;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -33,7 +43,7 @@ public class q3 extends HttpServlet {
     
     @Override 
     public void init(){
-    	db=new MySqlConnector();
+    	db=new HBaseConnector("retweet");
     }
     
     @Override
@@ -50,11 +60,12 @@ public class q3 extends HttpServlet {
             out.println(teamID  + ", " + AWSID);
 
             String userid = request.getParameter("userid");
-
-	    List<String> userID = db.getRetweetUidByUid(userId);
             
-	    for (String user : userID) {
-                out.println(tweet);
+
+            List<String> uids = db.getRetweetUidByUid(userid);
+            
+            for (String uid : uids){
+                out.println(uid);
             }
         } catch (Exception ex){
             ex.printStackTrace();
