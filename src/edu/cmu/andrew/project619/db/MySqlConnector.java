@@ -59,6 +59,12 @@ public class MySqlConnector implements DBConnector {
         return tweetID;
     }
 
+	@Override
+	public List<String> getRetweetUidByUid(String userId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 
 }

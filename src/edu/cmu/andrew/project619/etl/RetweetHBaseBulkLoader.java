@@ -18,38 +18,34 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
+import edu.cmu.andrew.project619.db.HBaseRetweetTable;
 import edu.cmu.andrew.project619.db.HBaseTwitterTable;
 import edu.cmu.andrew.project619.model.Twitter;
 import edu.cmu.andrew.project619.util.RowKeyConverter;
 import edu.cmu.andrew.project619.util.TimeFormater;
 
-public class TwitterHBaseBulkLoader {
+public class RetweetHBaseBulkLoader {
 
-	public static class TwitterBulkLoadMapper extends
+	public static class RetweetBulkLoadMapper extends
 			Mapper<LongWritable, Text, ImmutableBytesWritable, Put> {
 		public void map(LongWritable key, Text value, Context context)
 				throws IOException, InterruptedException {
 			String line = value.toString();
 			Twitter twitter = new Twitter(value.toString());
-			if (twitter.isValid()) {
+			if (twitter.isValid()&&twitter.getRetweet()!=null) {
 				byte[] rowKey = RowKeyConverter
-						.makeTwitterRowKey(twitter.getUserId(),
-								twitter.getTime(), twitter.getId());
+						.makeTwitterRowKey(twitter.getRetweet().getUserId(),twitter.getUserId(),twitter.getId());
 
 				Put p = new Put(rowKey);
+				p.add(HBaseRetweetTable.RETWEET_COLUMNFAMILY,HBaseRetweetTable.OUID_QUALIFIER,Bytes.toBytes(twitter.getRetweet().getUserId()+""));
+				p.add(HBaseRetweetTable.RETWEET_COLUMNFAMILY,HBaseRetweetTable.OTID_QUALIFIER,Bytes.toBytes(twitter.getRetweet().getId()+""));
+				p.add(HBaseRetweetTable.RETWEET_COLUMNFAMILY,HBaseRetweetTable.RUID_QUALIFIER,Bytes.toBytes(twitter.getUserId()+""));
+				p.add(HBaseRetweetTable.RETWEET_COLUMNFAMILY,HBaseRetweetTable.RTID_QUALIFIER,Bytes.toBytes(twitter.getId()+""));
 
-				p.add(HBaseTwitterTable.TWITTER_COLUMNFAMILY,
-						HBaseTwitterTable.UID_QUALIFIER,
-						Bytes.toBytes(twitter.getUserId() + ""));
-				p.add(HBaseTwitterTable.TWITTER_COLUMNFAMILY,
-						HBaseTwitterTable.TIME_QUALIFIER, Bytes
-								.toBytes(TimeFormater.formatTime(twitter
-										.getTime())));
-				p.add(HBaseTwitterTable.TWITTER_COLUMNFAMILY,
-						HBaseTwitterTable.TID_QUALIFIER,
-						Bytes.toBytes(twitter.getId() + ""));
+				
 				ImmutableBytesWritable HKey = new ImmutableBytesWritable(rowKey);
 				context.write(HKey, p);
+
 			}
 	
 		}
@@ -67,8 +63,8 @@ public class TwitterHBaseBulkLoader {
 		job.setReduceSpeculativeExecution(false);
 		job.setInputFormatClass(TextInputFormat.class);
 		job.setOutputFormatClass(HFileOutputFormat.class);
-		job.setJarByClass(TwitterHBaseBulkLoader.class);
-		job.setMapperClass(TwitterBulkLoadMapper.class);
+		job.setJarByClass(RetweetHBaseBulkLoader.class);
+		job.setMapperClass(RetweetBulkLoadMapper.class);
 		FileInputFormat.setInputPaths(job, inputPath);
 		FileOutputFormat.setOutputPath(job, new Path(outputPath));
 		HFileOutputFormat.configureIncrementalLoad(job, hTable);

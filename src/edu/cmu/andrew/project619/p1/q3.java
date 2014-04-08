@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author fxqw8_000
  */
-public class q2 extends HttpServlet {
+public class q3 extends HttpServlet {
 
     /**
 	 * 
@@ -43,7 +43,7 @@ public class q2 extends HttpServlet {
     
     @Override 
     public void init(){
-    	db=new HBaseConnector("twitter");
+    	db=new HBaseConnector("retweet");
     }
     
     @Override
@@ -60,12 +60,12 @@ public class q2 extends HttpServlet {
             out.println(teamID  + ", " + AWSID);
 
             String userid = request.getParameter("userid");
-            String time = request.getParameter("tweet_time");
-
-            List<String> tweetID = db.getTidByUidAndTime(userid,time);
             
-            for (String tweet : tweetID){
-                out.println(tweet);
+
+            List<String> uids = db.getRetweetUidByUid(userid);
+            
+            for (String uid : uids){
+                out.println(uid);
             }
         } catch (Exception ex){
             ex.printStackTrace();

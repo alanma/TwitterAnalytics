@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import org.json.JSONObject;
 
+import edu.cmu.andrew.project619.util.RowKeyConverter;
 import edu.cmu.andrew.project619.util.TimeFormater;
 
 public class Twitter {
@@ -43,10 +44,17 @@ public class Twitter {
 			BufferedReader br=new BufferedReader(fr);
 			String ts;
 			while((ts=br.readLine())!=null){
-				Twitter t=new Twitter(ts);
-				if(t.getRetweet()!=null){
-				System.out.println(t.getRetweet().getUserId());
-				}
+				Twitter twitter=new Twitter(ts);
+				//if (twitter.isValid()&&twitter.getRetweet()!=null) {
+					byte[] rowKey = RowKeyConverter
+							.makeTwitterRowKey(twitter.getTime(),twitter.getUserId(),twitter.getId());
+					for(byte b:rowKey){
+						System.out.print(String.format("%02X ", b));
+					}
+					System.out.println();
+				//}
+				
+				
 			}
 			//System.out.println(br.readLine());
 			
