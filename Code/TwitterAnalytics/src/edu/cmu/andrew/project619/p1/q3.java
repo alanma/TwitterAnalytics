@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author fxqw8_000
  */
-public class q2 extends HttpServlet {
+public class q3 extends HttpServlet {
 
     /**
 	 * 
@@ -43,8 +43,8 @@ public class q2 extends HttpServlet {
     
     @Override 
     public void init(){
-    	db=new HBaseConnector("twitter");
-//    	db=new MySqlConnector();
+//    	db=new HBaseConnector("retweet");
+    	db=new MySqlConnector();
     }
     
     @Override
@@ -59,14 +59,11 @@ public class q2 extends HttpServlet {
         response.setContentType("text/plain;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             out.println(teamID  + ", " + AWSID);
-
             String userid = request.getParameter("userid");
-            String time = request.getParameter("tweet_time");
-
-            List<String> tweetID = db.getTidByUidAndTime(userid,time);
+            List<String> uids = db.getRetweetUidByUid(userid);
             
-            for (String tweet : tweetID){
-                out.println(tweet);
+            for (String uid : uids){
+                out.println(uid);
             }
         } catch (Exception ex){
             ex.printStackTrace();

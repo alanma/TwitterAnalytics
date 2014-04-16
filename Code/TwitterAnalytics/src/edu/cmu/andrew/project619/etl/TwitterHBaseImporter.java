@@ -41,13 +41,13 @@ public class TwitterHBaseImporter extends Configured implements Tool {
 				System.out.println(twitter);
 				byte[] rowKey = RowKeyConverter
 						.makeTwitterRowKey(twitter.getTime(),
-								twitter.getUid(), twitter.getId());
+								twitter.getUserId(), twitter.getId());
 
 				Put p = new Put(rowKey);
 
 				p.add(HBaseTwitterTable.TWITTER_COLUMNFAMILY,
 						HBaseTwitterTable.UID_QUALIFIER,
-						Bytes.toBytes(twitter.getUid() + ""));
+						Bytes.toBytes(twitter.getUserId() + ""));
 				p.add(HBaseTwitterTable.TWITTER_COLUMNFAMILY,
 						HBaseTwitterTable.TIME_QUALIFIER, Bytes
 								.toBytes(TimeFormater.formatTime(twitter

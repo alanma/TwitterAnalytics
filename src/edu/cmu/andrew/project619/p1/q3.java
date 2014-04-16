@@ -43,8 +43,8 @@ public class q3 extends HttpServlet {
     
     @Override 
     public void init(){
-    	//db=new HBaseConnector("retweet");
-    	db=new MySqlConnector();
+    	db=new HBaseConnector("retweet");
+//    	db=new MySqlConnector();
     }
     
     @Override
@@ -59,10 +59,7 @@ public class q3 extends HttpServlet {
         response.setContentType("text/plain;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             out.println(teamID  + ", " + AWSID);
-
             String userid = request.getParameter("userid");
-            
-
             List<String> uids = db.getRetweetUidByUid(userid);
             
             for (String uid : uids){

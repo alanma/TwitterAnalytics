@@ -7,17 +7,19 @@
 package edu.cmu.andrew.project619.p1;
 
 import edu.cmu.andrew.project619.db.DBConnector;
-import edu.cmu.andrew.project619.db.HBaseConnector;
 import edu.cmu.andrew.project619.db.MySqlConnector;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 /**
  *
@@ -31,7 +33,7 @@ public class q2 extends HttpServlet {
 	private static final long serialVersionUID = 728956133897195165L;
 	private static final String teamID = "Rainforest";
     private static final String AWSID = "2422-0942-6899";
-    private DBConnector db=null;
+    private MySqlConnector db=null;
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -43,13 +45,21 @@ public class q2 extends HttpServlet {
     
     @Override 
     public void init(){
-    	db=new HBaseConnector("twitter");
-//    	db=new MySqlConnector();
+    	InitialContext initCtx;
+		try {
+			initCtx = new InitialContext();
+			DataSource dataSource = (DataSource) initCtx.lookup("java:comp/env/jdbc/TestDB");
+			db=new MySqlConnector(dataSource);
+		} catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
     }
     
     @Override
     public void destroy(){
-    	db.closeConnection();
+    	//db.closeConnection();
     	super.destroy();
     }
     

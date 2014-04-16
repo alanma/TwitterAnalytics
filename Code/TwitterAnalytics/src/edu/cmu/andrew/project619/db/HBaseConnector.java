@@ -33,7 +33,7 @@ public class HBaseConnector implements DBConnector{
     public HBaseConnector(String tableName) {
         Configuration config = HBaseConfiguration.create();  
 		config.clear();
-		config.set("hbase.zookeeper.quorum", "10.159.53.2");
+		config.set("hbase.zookeeper.quorum", "10.45.174.142");
         config.set("hbase.zookeeper.property.clientPort","2181");
         table = initHTable(config,tableName);
     }

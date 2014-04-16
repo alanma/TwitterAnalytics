@@ -34,12 +34,12 @@ public class RetweetHBaseBulkLoader {
 			Twitter twitter = new Twitter(value.toString());
 			if (twitter.isValid()&&twitter.getRetweet()!=null) {
 				byte[] rowKey = RowKeyConverter
-						.makeTwitterRowKey(twitter.getRetweet().getUid(),twitter.getUid(),twitter.getId());
+						.makeTwitterRowKey(twitter.getRetweet().getUserId(),twitter.getUserId(),twitter.getId());
 
 				Put p = new Put(rowKey);
-				p.add(HBaseRetweetTable.RETWEET_COLUMNFAMILY,HBaseRetweetTable.OUID_QUALIFIER,Bytes.toBytes(twitter.getRetweet().getUid()+""));
+				p.add(HBaseRetweetTable.RETWEET_COLUMNFAMILY,HBaseRetweetTable.OUID_QUALIFIER,Bytes.toBytes(twitter.getRetweet().getUserId()+""));
 				p.add(HBaseRetweetTable.RETWEET_COLUMNFAMILY,HBaseRetweetTable.OTID_QUALIFIER,Bytes.toBytes(twitter.getRetweet().getId()+""));
-				p.add(HBaseRetweetTable.RETWEET_COLUMNFAMILY,HBaseRetweetTable.RUID_QUALIFIER,Bytes.toBytes(twitter.getUid()+""));
+				p.add(HBaseRetweetTable.RETWEET_COLUMNFAMILY,HBaseRetweetTable.RUID_QUALIFIER,Bytes.toBytes(twitter.getUserId()+""));
 				p.add(HBaseRetweetTable.RETWEET_COLUMNFAMILY,HBaseRetweetTable.RTID_QUALIFIER,Bytes.toBytes(twitter.getId()+""));
 
 				

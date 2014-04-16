@@ -33,14 +33,14 @@ public class TwitterHBaseBulkLoader {
 			Twitter twitter = new Twitter(value.toString());
 			if (twitter.isValid()) {
 				byte[] rowKey = RowKeyConverter
-						.makeTwitterRowKey(twitter.getUserId(),
+						.makeTwitterRowKey(twitter.getUid(),
 								twitter.getTime(), twitter.getId());
 
 				Put p = new Put(rowKey);
 
 				p.add(HBaseTwitterTable.TWITTER_COLUMNFAMILY,
 						HBaseTwitterTable.UID_QUALIFIER,
-						Bytes.toBytes(twitter.getUserId() + ""));
+						Bytes.toBytes(twitter.getUid() + ""));
 				p.add(HBaseTwitterTable.TWITTER_COLUMNFAMILY,
 						HBaseTwitterTable.TIME_QUALIFIER, Bytes
 								.toBytes(TimeFormater.formatTime(twitter
